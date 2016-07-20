@@ -109,7 +109,8 @@ body {
   position: absolute;
   box-sizing: border-box;
 }
-#lightbox #lightboxarrows div {
+#lightbox #lightboxarrows #left,
+#lightbox #lightboxarrows #right {
   width: 49%;
   height: 100%;
   cursor: pointer;
