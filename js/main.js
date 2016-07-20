@@ -271,7 +271,7 @@ var lightbox = {
 
     // remove second element
     window.setTimeout(function() {
-      document.getElementsByClassName("lightboxphotoelem")[1].remove();
+      document.getElementsByClassName("lightboxphotoelem")[1].outerHTML = '';
     }, 100);
 
     lightbox.setupArrowIDs(photoID);
