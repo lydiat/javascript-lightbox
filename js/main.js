@@ -3,7 +3,6 @@
 //
 // Check functionality in Safari, Firefox, and IE
 // Add captions
-// Fix the fast clicks
 
 var lightbox = {
 
@@ -19,24 +18,26 @@ var lightbox = {
 
     var flickrAPIArgs, photoData;
 
-    flickrAPIArgs = {"method":"flickr.people.getPhotos", "arg":"user_id=" + lightbox.flickrUserID};
+    flickrAPIArgs = {
+      "method": "flickr.people.getPhotos",
+      "arg": "user_id=" + lightbox.flickrUserID
+    };
 
-    photoData = lightbox.callFlickrAPI(flickrAPIArgs, function(){
-      photoData  = JSON.parse(this.responseText);
-      lightbox.parseJSON(photoData.photos.photo);      
+    photoData = lightbox.callFlickrAPI(flickrAPIArgs, function() {
+      photoData = JSON.parse(this.responseText);
+      lightbox.parseJSON(photoData.photos.photo);
     });
 
   },
 
-  callFlickrAPI: function(elem, callback){
+  callFlickrAPI: function(elem, callback) {
 
     var flickrAPICall, xhr, flickrResponse;
- //   console.log(elem);
 
     // using template literals would be pretty sweet here, WOULDN'T IT IE 11
-    flickrAPICall =  "https://api.flickr.com/services/rest/?method=" + elem.method;
+    flickrAPICall = "https://api.flickr.com/services/rest/?method=" + elem.method;
     flickrAPICall += "&extras=original_format&api_key=" + lightbox.flickrApiKey + "&";
-    flickrAPICall +=  elem.arg + "&format=json&nojsoncallback=?";
+    flickrAPICall += elem.arg + "&format=json&nojsoncallback=?";
 
     xhr = new XMLHttpRequest();
     xhr.open("GET", flickrAPICall, true);
@@ -44,8 +45,8 @@ var lightbox = {
       if (xhr.readyState === 4 && xhr.status === 200) {
         callback.apply(xhr);
       } else {
-      //  console.log(xhr.status);
-     //   console.log(xhr.readyState);
+        //  console.log(xhr.status);
+        //  console.log(xhr.readyState);
       }
     };
     xhr.send();
@@ -56,6 +57,7 @@ var lightbox = {
 
     var key, imgSrc, detailPhotoSrc, thumbPhotoSrc, imgObj, farmID, serverID, secretID, originalSecretID, photoID;
     var thumbHTML = '';
+    var imgObjArray = [];
 
     for (key in data) {
       if (data.hasOwnProperty(key)) {
@@ -70,12 +72,15 @@ var lightbox = {
         originalSecretID = imgObj.originalsecret;
         photoID = imgObj.id;
 
+        imgObjArray.push(photoID);
+
         imgSrc = "https://farm" + farmID + ".staticflickr.com/" + serverID + "/" + photoID + "_";
 
         thumbPhotoSrc = imgSrc + secretID + "_q.jpg";
         detailPhotoSrc = imgSrc + secretID + "_b.jpg";
-        detailBigPhotoSrc = imgSrc + originalSecretID + "_o.jpg";
 
+        // in case I feel ambitious and build screen-adaptive photo loading
+        detailBigPhotoSrc = imgSrc + originalSecretID + "_o.jpg";
 
         thumbHTML += "<div class='img' title='' id='" + photoID + "' data-pid='" + key + "'";
         thumbHTML += " data-img='" + detailPhotoSrc + "' style='background-image:url(" + thumbPhotoSrc + ")'></div>";
@@ -86,22 +91,28 @@ var lightbox = {
     lightbox.photoTotal = Number(key);
 
     lightbox.placeHTML(thumbHTML);
-    //lightbox.getCaptions();
+    imgObjArray.forEach(lightbox.getCaption);
 
   },
 
-  getCaptions: function(){
-      // for each thumb, use id as photoid and apply title
-        flickrAPIArgs = {"method":"flickr.photos.getInfo", "arg":"photo_id=" + data};
+  // for each thumb, use id as photoid and update title
+  getCaption: function(data) {
+    var key, flickrAPIArgs, photoInfo, captionText, photoData;
 
-        photoData = lightbox.callFlickrAPI(flickrAPIArgs, function(){
-          photoData  = JSON.parse(this.responseText);
-          var desc =  photoData.photo.description._content;
-        });
+    flickrAPIArgs = {
+      "method": "flickr.photos.getInfo",
+      "arg": "photo_id=" + data
+    };
 
+    photoData = lightbox.callFlickrAPI(flickrAPIArgs, function() {
+      photoInfo = JSON.parse(this.responseText);
+      captionText = photoInfo.photo.description._content;
+      document.getElementById(data).title = captionText;
+    });
 
   },
 
+  // set photo thumbs into container and initiate click and key handlers
   placeHTML: function(elem) {
 
     document.getElementById("container").innerHTML = elem;
@@ -146,10 +157,11 @@ var lightbox = {
       lightbox.openLightbox();
       photoID = elem.target.dataset.pid;
 
-      photoHTML =  "<div class='lightboxphotoelem' data-pid='" + photoID + "' ";
+      photoHTML = "<div class='lightboxphotoelem' data-pid='" + photoID + "' ";
       photoHTML += "style='background-image:url(" + elem.target.dataset.img + ")' ></div>";
 
       document.getElementById("lightboxphotoholder").innerHTML = photoHTML;
+      document.getElementById("lightboxcaption").innerHTML = elem.target.title;
 
       lightbox.setupArrowIDs(photoID);
 
@@ -167,7 +179,7 @@ var lightbox = {
       clickedItem = elem.target.classList[0];
       if (clickedItem === 'next' || clickedItem === 'prev') {
         lightbox.placeUpcomingPhoto(elem);
-      } else if (clickedItem === 'close') { 
+      } else if (clickedItem === 'close') {
         lightbox.closeLightbox();
       }
     }
@@ -203,7 +215,7 @@ var lightbox = {
 
   },
 
-  preloadImage: function(elem){
+  preloadImage: function(elem) {
 
     var nextphotoID, imgOfphotoID;
 
@@ -224,16 +236,19 @@ var lightbox = {
       photoID = elem.target.dataset.pid;
     } else { // clicking on arrow span within div
       photoID = elem.target.parentNode.dataset.pid;
-    } 
- 
+    }
+
     elemOfphotoID = document.querySelectorAll("[data-pid='" + photoID + "']");
     imgOfphotoID = elemOfphotoID[0].dataset.img;
-    newPhotoHTML =  "<div class='lightboxphotoelem' data-pid='" + photoID + "' ";
+
+    newPhotoHTML = "<div class='lightboxphotoelem' data-pid='" + photoID + "' ";
     newPhotoHTML += "style='background-image:url(" + imgOfphotoID + ")' ></div>";
     document.getElementById('lightboxphotoholder').insertAdjacentHTML('afterbegin', newPhotoHTML);
+    document.getElementById("lightboxcaption").innerHTML = elemOfphotoID[0].title;
+
 
     // remove second element
-    window.setTimeout(function(){
+    window.setTimeout(function() {
       document.getElementsByClassName("lightboxphotoelem")[1].remove();
     }, 100);
 
