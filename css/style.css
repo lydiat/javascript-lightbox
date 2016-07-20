@@ -124,7 +124,7 @@ body {
   background: white;
   width: 50px;
   height: 50px;
-  opacity: .75;
+  opacity: 0;
   border-radius: 5%;
   top: 50%;
   position: absolute;
@@ -152,6 +152,10 @@ body {
 #lightbox #lightboxarrows #left:hover,
 #lightbox #lightboxarrows #right:hover {
   opacity: 1;
+}
+#lightbox #lightboxarrows #left:hover span,
+#lightbox #lightboxarrows #right:hover span {
+  opacity: .75;
 }
 #lightbox #lightboxarrows span:after {
   content: "";
