@@ -11,7 +11,7 @@
 <body>
 
   <div id="container">
-    <div id="loading">loading...</div>
+    <div id="loading"></div>
   </div>
   <div id="lightbox">
     <div id="lightboxbg"></div>
