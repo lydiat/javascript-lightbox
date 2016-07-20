@@ -112,6 +112,7 @@ body {
 #lightbox #lightboxarrows #left,
 #lightbox #lightboxarrows #right {
   width: 49%;
+  border: 1px solid blue;
   height: 100%;
   cursor: pointer;
   opacity: 0;
@@ -149,8 +150,10 @@ body {
   border-left: solid 15px #808080;
   left: 17px;
 }
-#lightbox #lightboxarrows div:hover {
+#lightbox #lightboxarrows #left:hover,
+#lightbox #lightboxarrows #right:hover {
   opacity: 1;
+  border: 1px solid red;
 }
 #lightbox #lightboxarrows span:after {
   content: "";

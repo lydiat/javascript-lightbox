@@ -119,6 +119,7 @@ body {
     box-sizing: border-box;
     #left, #right {
       width: 49%;
+      border:1px solid blue;
       height: 100%;
       cursor: pointer;
       opacity: 0;
@@ -156,8 +157,9 @@ body {
       border-left: solid 15px @gray;
       left: 17px;
     }
-    div:hover {
+    #left:hover, #right:hover {
       opacity: 1;
+      border:1px solid red;
     }
     span:after {
       content: "";
