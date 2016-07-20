@@ -1,0 +1,186 @@
+/* css/style.less */
+
+@gray : #808080;
+@fastspeed : .1s;
+@slowspeed : .75s;
+html,
+body {
+  position: relative;
+  display: block;
+  margin: 0px;
+  padding: 0px;
+  font-family: sans-serif;
+}
+
+#container {
+  #loading {
+    position: fixed;
+    width: 100%;
+    height: 100%;
+    line-height: 100px;
+    text-transform: uppercase;
+    text-align: center;
+  }
+  .img {
+    padding: 10px;
+    margin: 10px;
+    width: 100px;
+    height: 100px;
+    float: left;
+    background-size: cover;
+    background-position: center center;
+    border: 2px solid white;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: transform @fastspeed ease;
+    -moz-transition: transform @fastspeed ease;
+    -ms-transition: transform @fastspeed ease;
+    -webkit-transition: transform @fastspeed ease;
+  }
+  .img:hover {
+    transform: scale(1.05);
+    -moz-transform: scale(1.05);
+    -webkit-transform: scale(1.05);
+    -ms-transform: scale(1.05);
+  }
+}
+
+#lightbox {
+  position: fixed;
+  width: 0px;
+  height: 0px;
+  opacity: 0;
+  transition: opacity @slowspeed ease-out;
+  -webkit-transition: opacity @slowspeed ease-out;
+  -moz-transition: opacity @slowspeed ease-out;
+  &.open {
+    opacity: 1;
+    width: 100%;
+    height: 100%;
+  }
+  #lightboxbg {
+    opacity: .75;
+    background: #ddd;
+    width: 100%;
+    height: 100%;
+    position: absolute;
+  }
+  #lightboxcaption{
+    position: absolute;
+    bottom: -20px;
+    z-index: 999;
+    padding-left: 5px;
+    text-align: center;
+    width: 100%;
+  }
+  #lightboxphoto {
+    width: 90%;
+    height: 90%;
+    margin: 3% 5%;
+    display: block;
+    position: relative;
+  }
+  .lightboxphotoelem {
+    display: block;
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center center;
+    height: 100%;
+    width: 100%;
+    position: absolute;
+    &:nth-child(2) {
+      transition: opacity @fastspeed ease-out;
+      -webkit-transition: opacity @fastspeed ease-out;
+      -moz-transition: opacity @fastspeed ease-out;
+      opacity: 0;
+    }
+  }
+  #lightboxarrows {
+    width: 100%;
+    height: 100%;
+    top: 0px;
+    position: absolute;
+    box-sizing: border-box;
+    div {
+      width: 49%;
+      height: 100%;
+      cursor: pointer;
+      transition: opacity @fastspeed ease-out;
+      -webkit-transition: opacity @fastspeed ease-out;
+      -moz-transition: opacity @fastspeed ease-out;
+      opacity: 0;
+    }
+    span {
+      background: white;
+      width: 50px;
+      height: 50px;
+      opacity: .75;
+      border-radius: 5%;
+      top: 50%;
+      position: absolute;
+    }
+    #left {
+      float: left;
+    }
+    #left span {
+      left: 20px;
+    }
+    #left span:after {
+      border-right: solid 20px @gray;
+      right: 17px;
+    }
+    #right {
+      float: right;
+    }
+    #right span {
+      right: 20px;
+    }
+    #right span:after {
+      border-left: solid 15px @gray;
+      left: 17px;
+    }
+    div:hover {
+      opacity: 1;
+    }
+    span:after {
+      content: "";
+      display: block;
+      position: absolute;
+      top: 50%;
+      border-bottom: solid 15px transparent;
+      border-top: solid 15px transparent;
+      top: 10px;
+    }
+  }
+  .close {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    background: white;
+    opacity: .75;
+    border-radius: 5%;
+    cursor: pointer;
+    width: 50px;
+    height: 50px;
+    cursor: pointer;
+    transition: opacity @fastspeed ease-out;
+    -webkit-transition: opacity @fastspeed ease-out;
+    -moz-transition: opacity @fastspeed ease-out;
+  }
+  .close:hover {
+    opacity: 1;
+  }
+  .close:after {
+    content: '\d7';
+    text-align: center;
+    line-height: 50px;
+    font-family: Verdana;
+    font-size: 24px;
+    color: @gray;
+    padding: 15px;
+  }
+}
+
+#photocache {
+  display: none;
+}
