@@ -1,8 +1,11 @@
 /* css/style.less */
 
-@gray : #808080;
-@fastspeed : .1s;
-@slowspeed : .75s;
+@gray      : #808080;
+@lightgray : #dddddd;
+@blue      : #6ecadc;
+@fastspeed : 0.1s;
+@slowspeed : 0.75s;
+
 html,
 body {
   position: relative;
@@ -13,6 +16,9 @@ body {
 }
 
 #container {
+  padding:5px 10px;
+  display:block;
+  margin:0px auto;
   #loading {
     position: fixed;
     width: 100%;
@@ -49,6 +55,7 @@ body {
   position: fixed;
   width: 0px;
   height: 0px;
+  top:0px;
   opacity: 0;
   transition: opacity @slowspeed ease-out;
   -webkit-transition: opacity @slowspeed ease-out;
@@ -59,8 +66,8 @@ body {
     height: 100%;
   }
   #lightboxbg {
-    opacity: .75;
-    background: #ddd;
+    opacity: .9;
+    background: @lightgray;
     width: 100%;
     height: 100%;
     position: absolute;
@@ -72,11 +79,12 @@ body {
     padding-left: 5px;
     text-align: center;
     width: 100%;
+    font-size:14px;
   }
   #lightboxphoto {
     width: 90%;
     height: 90%;
-    margin: 3% 5%;
+    margin: 2% 5%;
     display: block;
     position: relative;
     background-image:url(../assets/spinny.gif);
@@ -99,8 +107,9 @@ body {
     }
   }
   #lightboxarrows {
-    width: 100%;
-    height: 100%;
+    width: 90%;
+    height: 90%;
+    margin:2% 5%;
     top: 0px;
     position: absolute;
     box-sizing: border-box;
@@ -157,7 +166,7 @@ body {
   }
   .close {
     position: absolute;
-    top: 20px;
+    top: 17px;
     right: 20px;
     background: white;
     opacity: .75;
@@ -180,6 +189,18 @@ body {
     font-size: 24px;
     color: @gray;
     padding: 15px;
+  }
+  #hint {
+    display:none;
+    top: 0px;
+    position: absolute;
+    text-align: center;
+    font-size: 12;
+    background: @blue;
+    margin: 17px 0px 0px 20px;
+    border-radius: 5px;
+    padding: 1% 2%;
+    opacity: .9;
   }
 }
 

@@ -13,6 +13,7 @@
   <div id="container">
     <div id="loading"></div>
   </div>
+
   <div id="lightbox">
     <div id="lightboxbg"></div>
     <div id="lightboxphoto">
@@ -24,7 +25,9 @@
       <div id="right" class="next"><span class="next"></span></div>
     </div>
     <div class="close"></div>
+    <div id="hint">Psst - you can use arrow and escape keys, too!</div>
   </div>
+  
   <div id="photocache"></div>
 </body>
 

@@ -82,8 +82,8 @@ var lightbox = {
         // in case I feel ambitious and build screen-adaptive photo loading
         detailBigPhotoSrc = imgSrc + originalSecretID + "_o.jpg";
 
-        thumbHTML += "<div class='img' title='' id='" + photoID + "' data-pid='" + key + "'";
-        thumbHTML += " data-img='" + detailPhotoSrc + "' style='background-image:url(" + thumbPhotoSrc + ")'></div>";
+        thumbHTML += "<span class='img' title='' id='" + photoID + "' data-pid='" + key + "'";
+        thumbHTML += " data-img='" + detailPhotoSrc + "' style='background-image:url(" + thumbPhotoSrc + ")'></span>";
       }
     }
 
@@ -95,16 +95,17 @@ var lightbox = {
 
   },
 
-  // for each thumb, use id as photoid and update title
+  // use thumb id as photoid to update title
   getCaption: function(data) {
-    var key, flickrAPIArgs, photoInfo, captionText, photoData;
+
+    var flickrAPIArgs, key, photoInfo, captionText, captionData;
 
     flickrAPIArgs = {
       "method": "flickr.photos.getInfo",
       "arg": "photo_id=" + data
     };
 
-    photoData = lightbox.callFlickrAPI(flickrAPIArgs, function() {
+    captionData = lightbox.callFlickrAPI(flickrAPIArgs, function() {
       photoInfo = JSON.parse(this.responseText);
       captionText = photoInfo.photo.description._content;
       document.getElementById(data).title = captionText;
@@ -112,13 +113,14 @@ var lightbox = {
 
   },
 
-  // set photo thumbs into container and initiate click and key handlers
+  // set photo thumbs into container and initiate click and key handlers and thumb container placement
   placeHTML: function(elem) {
 
     document.getElementById("container").innerHTML = elem;
 
     lightbox.clickHandler();
     lightbox.keyHandler();
+    lightbox.sizeContainer();
 
   },
 
@@ -137,15 +139,29 @@ var lightbox = {
 
   keyManipulateLightbox: function(e) {
 
+
     e = e || window.event;
 
     if (e.which === 39) {
       lightbox.placeUpcomingPhoto("right");
+      // if a user presses an arrow key, hide hint
+      document.getElementById("hint").style.display = 'none';
     } else if (e.which === 37) {
       lightbox.placeUpcomingPhoto("left");
+      document.getElementById("hint").style.display = 'none';
     } else if (e.which === 27) {
       lightbox.closeLightbox();
     }
+  },
+
+  sizeContainer: function(){
+
+    y = Math.floor((window.innerWidth - 20) / 144); // 100 width + 20 padding + 20 margin + 4 border
+    z = y * 144;
+
+    document.getElementById("container").style.width = z;
+    window.addEventListener("resize",lightbox.sizeContainer);
+
   },
 
   initiateLightbox: function(elem) {
@@ -164,15 +180,24 @@ var lightbox = {
       document.getElementById("lightboxcaption").innerHTML = elem.target.title;
 
       lightbox.setupArrowIDs(photoID);
-
+      lightbox.setHintTimeout();
     }
 
     elem.stopPropagation();
 
   },
 
-  advanceLightbox: function(elem) {
+  setHintTimeout: function(){
 
+    // poor man's ux hinting 
+    document.getElementById("hint").style.display = 'block';
+    setTimeout(function(){
+      document.getElementById("hint").style.display = 'none';
+    }, 3000);
+
+  }, 
+
+  advanceLightbox: function(elem) {
     var clickedItem;
     if (elem.target !== elem.currentTarget) {
 
@@ -245,7 +270,6 @@ var lightbox = {
     newPhotoHTML += "style='background-image:url(" + imgOfphotoID + ")' ></div>";
     document.getElementById('lightboxphotoholder').insertAdjacentHTML('afterbegin', newPhotoHTML);
     document.getElementById("lightboxcaption").innerHTML = elemOfphotoID[0].title;
-
 
     // remove second element
     window.setTimeout(function() {
