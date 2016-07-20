@@ -1,9 +1,3 @@
-//
-// Task Backlog
-//
-// Check functionality in Safari, Firefox, and IE
-// Add captions
-
 var lightbox = {
 
   flickrApiKey: "f1a836ca91876fec109588c72ecc641d",
@@ -14,6 +8,7 @@ var lightbox = {
     window.addEventListener('DOMContentLoaded', lightbox.getPhotosFromAPI, false);
   },
 
+  // construct args for photo-getting API call
   getPhotosFromAPI: function() {
 
     var flickrAPIArgs, photoData;
@@ -30,6 +25,7 @@ var lightbox = {
 
   },
 
+  // Flickr API call workhorse
   callFlickrAPI: function(elem, callback) {
 
     var flickrAPICall, xhr, flickrResponse;
@@ -53,9 +49,10 @@ var lightbox = {
 
   },
 
+  // assembling photo URLs from the data response
   parseJSON: function(data) {
 
-    var key, imgSrc, detailPhotoSrc, thumbPhotoSrc, imgObj, farmID, serverID, secretID, originalSecretID, photoID;
+    var key, imgSrc, detailPhotoSrc, thumbPhotoSrc, imgObj, farmID, serverID, secretID, originalSecretID, photoID, photoTitle;
     var thumbHTML = '';
     var imgObjArray = [];
 
@@ -71,6 +68,7 @@ var lightbox = {
         secretID = imgObj.secret;
         originalSecretID = imgObj.originalsecret;
         photoID = imgObj.id;
+        photoTitle = imgObj.title;
 
         imgObjArray.push(photoID);
 
@@ -79,10 +77,10 @@ var lightbox = {
         thumbPhotoSrc = imgSrc + secretID + "_q.jpg";
         detailPhotoSrc = imgSrc + secretID + "_b.jpg";
 
-        // in case I feel ambitious and build screen-adaptive photo loading
+        // in case one feels ambitious and wants to build screen-adaptive photo loading
         detailBigPhotoSrc = imgSrc + originalSecretID + "_o.jpg";
 
-        thumbHTML += "<span class='img' title='' id='" + photoID + "' data-pid='" + key + "'";
+        thumbHTML += "<span class='img' title='" + photoTitle + "' id='" + photoID + "' data-pid='" + key + "'";
         thumbHTML += " data-img='" + detailPhotoSrc + "' style='background-image:url(" + thumbPhotoSrc + ")'></span>";
       }
     }
@@ -90,26 +88,8 @@ var lightbox = {
     // get the total number of photos so we know when next and previous reset
     lightbox.photoTotal = Number(key);
 
+    // situate the HTML and captions
     lightbox.placeHTML(thumbHTML);
-    imgObjArray.forEach(lightbox.getCaption);
-
-  },
-
-  // use thumb id as photoid to update title
-  getCaption: function(data) {
-
-    var flickrAPIArgs, key, photoInfo, captionText, captionData;
-
-    flickrAPIArgs = {
-      "method": "flickr.photos.getInfo",
-      "arg": "photo_id=" + data
-    };
-
-    captionData = lightbox.callFlickrAPI(flickrAPIArgs, function() {
-      photoInfo = JSON.parse(this.responseText);
-      captionText = photoInfo.photo.description._content;
-      document.getElementById(data).title = captionText;
-    });
 
   },
 
@@ -118,27 +98,18 @@ var lightbox = {
 
     document.getElementById("container").innerHTML = elem;
 
-    lightbox.clickHandler();
-    lightbox.keyHandler();
+    // set event listeners for clicking or keypressing
+    document.getElementById("container").addEventListener("click", lightbox.initiateLightbox, false);
+    document.getElementById("lightbox").addEventListener("click", lightbox.advanceLightbox, false);
+    window.addEventListener("keydown", lightbox.keyManipulateLightbox, false);
+
+    // set width of container element for nicer display
     lightbox.sizeContainer();
 
   },
 
-  clickHandler: function() {
-
-    document.getElementById("container").addEventListener("click", lightbox.initiateLightbox, false);
-    document.getElementById("lightbox").addEventListener("click", lightbox.advanceLightbox, false);
-
-  },
-
-  keyHandler: function() {
-
-    window.addEventListener("keydown", lightbox.keyManipulateLightbox, false);
-
-  },
-
+  // keypress handlers 
   keyManipulateLightbox: function(e) {
-
 
     e = e || window.event;
 
@@ -154,11 +125,11 @@ var lightbox = {
     }
   },
 
+  // calculate container width based on number of possible squares
   sizeContainer: function(){
 
     var potentialSquares, measuredWidth; 
 
-    // calculate container width based on number of possible squares
     potentialSquares = Math.floor((window.innerWidth - 20) / 144); // 100 width + 20 padding + 20 margin + 4 border
     measuredWidth = (potentialSquares * 144);
     document.getElementById("container").style.width = measuredWidth + "px";
@@ -166,13 +137,15 @@ var lightbox = {
 
   },
 
+  // make lightbox visible and place first image
   initiateLightbox: function(elem) {
 
     var photoID, photoHTML;
 
     if (elem.target !== elem.currentTarget) {
 
-      lightbox.openLightbox();
+      document.getElementById("lightbox").classList.add('open');
+
       photoID = elem.target.dataset.pid;
 
       photoHTML = "<div class='lightboxphotoelem' data-pid='" + photoID + "' ";
@@ -189,6 +162,7 @@ var lightbox = {
 
   },
 
+  // poor man's ux hinting for keypress events
   setHintTimeout: function(){
 
     setTimeout(function(){
@@ -197,8 +171,11 @@ var lightbox = {
 
   }, 
 
+  // click functionality within lightbox
   advanceLightbox: function(elem) {
+
     var clickedItem;
+
     if (elem.target !== elem.currentTarget) {
 
       clickedItem = elem.target.classList[0];
@@ -212,18 +189,14 @@ var lightbox = {
 
   },
 
-  openLightbox: function() {
-
-    document.getElementById("lightbox").classList.add('open');
-
-  },
-
+  // remove class that makes lightbox visible
   closeLightbox: function() {
 
     document.getElementById("lightbox").classList.remove('open');
 
   },
 
+  // place next and previous ids on arrows (and preload next images)
   setupArrowIDs: function(elem) {
 
     var prev, next;
@@ -240,17 +213,19 @@ var lightbox = {
 
   },
 
+  // poor man's photo cache to reduce load time for next and previous images  
+  // I considered setInterval to preload all but past a certain number of images that would become too heavy
   preloadImage: function(elem) {
 
     var nextphotoID, imgOfphotoID;
 
-    // poor man's photo cache to reduce load time for next and previous images
     nextphotoID = document.querySelectorAll("[data-pid='" + elem + "']");
     imgOfphotoID = nextphotoID[0].dataset.img;
     document.getElementById('photocache').innerHTML = "<img src='" + imgOfphotoID + "' />";
 
   },
 
+  // depending on the element clicked or key pressed advance to the next photo
   placeUpcomingPhoto: function(elem) {
 
     var photoID, elemOfphotoID, imgOfphotoID, newPhotoHTML;
