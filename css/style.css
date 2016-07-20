@@ -46,6 +46,7 @@ body {
   position: fixed;
   width: 0px;
   height: 0px;
+  overflow: hidden;
   top: 0px;
   opacity: 0;
   transition: opacity 0.75s ease-out;
@@ -182,7 +183,6 @@ body {
   padding: 15px;
 }
 #lightbox #hint {
-  display: none;
   top: 0px;
   position: absolute;
   text-align: center;

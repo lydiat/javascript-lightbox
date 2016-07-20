@@ -189,8 +189,6 @@ var lightbox = {
 
   setHintTimeout: function(){
 
-    // poor man's ux hinting 
-    document.getElementById("hint").style.display = 'block';
     setTimeout(function(){
       document.getElementById("hint").style.display = 'none';
     }, 3000);
