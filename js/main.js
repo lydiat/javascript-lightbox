@@ -3,6 +3,7 @@
 //
 // Check functionality in Safari, Firefox, and IE
 // Add captions
+// Fix the fast clicks
 
 var lightbox = {
 
@@ -72,7 +73,8 @@ var lightbox = {
         imgSrc = "https://farm" + farmID + ".staticflickr.com/" + serverID + "/" + photoID + "_";
 
         thumbPhotoSrc = imgSrc + secretID + "_q.jpg";
-        detailPhotoSrc = imgSrc + originalSecretID + "_o.jpg";
+        detailPhotoSrc = imgSrc + secretID + "_b.jpg";
+        detailBigPhotoSrc = imgSrc + originalSecretID + "_o.jpg";
 
 
         thumbHTML += "<div class='img' title='' id='" + photoID + "' data-pid='" + key + "'";
@@ -233,7 +235,7 @@ var lightbox = {
     // remove second element
     window.setTimeout(function(){
       document.getElementsByClassName("lightboxphotoelem")[1].remove();
-    }, 750);
+    }, 100);
 
     lightbox.setupArrowIDs(photoID);
 
