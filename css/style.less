@@ -61,6 +61,8 @@ body {
   transition: opacity @slowspeed ease-out;
   -webkit-transition: opacity @slowspeed ease-out;
   -moz-transition: opacity @slowspeed ease-out;
+  -ms-transition: opacity @slowspeed ease-out;
+
   &.open {
     opacity: 1;
     width: 100%;
@@ -104,6 +106,7 @@ body {
       transition: opacity @fastspeed ease-out;
       -webkit-transition: opacity @fastspeed ease-out;
       -moz-transition: opacity @fastspeed ease-out;
+      -ms-transition: opacity @fastspeed ease-out;
       opacity: 0;
     }
   }
@@ -118,10 +121,11 @@ body {
       width: 49%;
       height: 100%;
       cursor: pointer;
+      opacity: 0;
       transition: opacity @fastspeed ease-out;
       -webkit-transition: opacity @fastspeed ease-out;
       -moz-transition: opacity @fastspeed ease-out;
-      opacity: 0;
+      -ms-transition: opacity @fastspeed ease-out;
     }
     span {
       background: white;
@@ -179,6 +183,8 @@ body {
     transition: opacity @fastspeed ease-out;
     -webkit-transition: opacity @fastspeed ease-out;
     -moz-transition: opacity @fastspeed ease-out;
+    -ms-transition: opacity @fastspeed ease-out;
+
   }
   .close:hover {
     opacity: 1;

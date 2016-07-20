@@ -52,6 +52,7 @@ body {
   transition: opacity 0.75s ease-out;
   -webkit-transition: opacity 0.75s ease-out;
   -moz-transition: opacity 0.75s ease-out;
+  -ms-transition: opacity 0.75s ease-out;
 }
 #lightbox.open {
   opacity: 1;
@@ -97,6 +98,7 @@ body {
   transition: opacity 0.1s ease-out;
   -webkit-transition: opacity 0.1s ease-out;
   -moz-transition: opacity 0.1s ease-out;
+  -ms-transition: opacity 0.1s ease-out;
   opacity: 0;
 }
 #lightbox #lightboxarrows {
@@ -111,10 +113,11 @@ body {
   width: 49%;
   height: 100%;
   cursor: pointer;
+  opacity: 0;
   transition: opacity 0.1s ease-out;
   -webkit-transition: opacity 0.1s ease-out;
   -moz-transition: opacity 0.1s ease-out;
-  opacity: 0;
+  -ms-transition: opacity 0.1s ease-out;
 }
 #lightbox #lightboxarrows span {
   background: white;
@@ -170,6 +173,7 @@ body {
   transition: opacity 0.1s ease-out;
   -webkit-transition: opacity 0.1s ease-out;
   -moz-transition: opacity 0.1s ease-out;
+  -ms-transition: opacity 0.1s ease-out;
 }
 #lightbox .close:hover {
   opacity: 1;
