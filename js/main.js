@@ -160,10 +160,8 @@ var lightbox = {
 
     // calculate container width based on number of possible squares
     potentialSquares = Math.floor((window.innerWidth - 20) / 144); // 100 width + 20 padding + 20 margin + 4 border
-    console.log(window.innerWidth);
-    measuredWidth = potentialSquares * 144;
-console.log(measuredWidth);
-    document.getElementById("container").style.width = measuredWidth;
+    measuredWidth = (potentialSquares * 144);
+    document.getElementById("container").style.width = measuredWidth + "px";
     window.addEventListener("resize", lightbox.sizeContainer);
 
   },
