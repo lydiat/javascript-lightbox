@@ -1,3 +1,11 @@
+//
+// Task Backlog
+//
+// Wide screen adaptive display
+// Lazy load for thumbs
+// Tagging and array filtering by location
+// 
+
 var lightbox = {
 
   flickrApiKey: "f1a836ca91876fec109588c72ecc641d",
@@ -28,7 +36,7 @@ var lightbox = {
   // Flickr API call workhorse
   callFlickrAPI: function(elem, callback) {
 
-    var flickrAPICall, xhr, flickrResponse;
+    var flickrAPICall, xhr;
 
     // using template literals would be pretty sweet here, WOULDN'T IT IE 11
     flickrAPICall = "https://api.flickr.com/services/rest/?method=" + elem.method;
@@ -52,7 +60,7 @@ var lightbox = {
   // assembling photo URLs from the data response
   parseJSON: function(data) {
 
-    var key, imgSrc, detailPhotoSrc, thumbPhotoSrc, imgObj, farmID, serverID, secretID, originalSecretID, photoID, photoTitle;
+    var key, imgObj, farmID, serverID, originalSecretID, photoID, photoTitle, imgSrc, thumbPhotoSrc, detailPhotoSrc, detailBigPhotoSrc;
     var thumbHTML = '';
     var imgObjArray = [];
 
@@ -77,7 +85,7 @@ var lightbox = {
         thumbPhotoSrc = imgSrc + secretID + "_q.jpg";
         detailPhotoSrc = imgSrc + secretID + "_b.jpg";
 
-        // in case one feels ambitious and wants to build screen-adaptive photo loading
+        // in case one feels ambitious and builds screen-adaptive photo loading
         detailBigPhotoSrc = imgSrc + originalSecretID + "_o.jpg";
 
         thumbHTML += "<span class='img' title='" + photoTitle + "' id='" + photoID + "' data-pid='" + key + "'";
@@ -126,9 +134,9 @@ var lightbox = {
   },
 
   // calculate container width based on number of possible squares
-  sizeContainer: function(){
+  sizeContainer: function() {
 
-    var potentialSquares, measuredWidth; 
+    var potentialSquares, measuredWidth;
 
     potentialSquares = Math.floor((window.innerWidth - 20) / 144); // 100 width + 20 padding + 20 margin + 4 border
     measuredWidth = (potentialSquares * 144);
@@ -163,13 +171,13 @@ var lightbox = {
   },
 
   // poor man's ux hinting for keypress events
-  setHintTimeout: function(){
+  setHintTimeout: function() {
 
-    setTimeout(function(){
+    setTimeout(function() {
       document.getElementById("hint").style.display = 'none';
     }, 3000);
 
-  }, 
+  },
 
   // click functionality within lightbox
   advanceLightbox: function(elem) {
@@ -208,8 +216,8 @@ var lightbox = {
     document.getElementById("left").dataset.pid = prev;
     document.getElementById("right").dataset.pid = next;
 
-    lightbox.preloadImage(next);
     lightbox.preloadImage(prev);
+    lightbox.preloadImage(next);
 
   },
 
