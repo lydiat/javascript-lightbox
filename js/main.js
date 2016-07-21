@@ -3,6 +3,8 @@ var lightbox = {
   flickrApiKey: "f1a836ca91876fec109588c72ecc641d",
   flickrUserID: "145147626@N05",
   photoTotal: 0,
+  prevPhotoPID: 0,
+  nextPhotoPID: 0,
 
   init: function() {
 
@@ -10,8 +12,7 @@ var lightbox = {
 
   },
 
-  // construct args for photo-getting API call
-  getPhotosFromAPI: function() {
+  getPhotosFromAPI: function() {  // construct args for photo-getting API call
 
     var flickrAPIArgs, photoData;
 
@@ -27,14 +28,12 @@ var lightbox = {
 
   },
 
-  // Flickr API call workhorse
-  callFlickrAPI: function(elem, callback) {
+  callFlickrAPI: function(elem, callback) {   // Flickr API call workhorse
 
     var flickrAPICall, xhr;
 
-    flickrAPICall = "https://api.flickr.com/services/rest/?method=" + elem.method;
-    flickrAPICall += "&extras=original_format&api_key=" + lightbox.flickrApiKey + "&";
-    flickrAPICall += elem.arg + "&format=json&nojsoncallback=?";
+    flickrAPICall = "https://api.flickr.com/services/rest/?method=" + elem.method + "&extras=original_format";
+    flickrAPICall += "&api_key=" + lightbox.flickrApiKey + "&" + elem.arg + "&format=json&nojsoncallback=?";
 
     xhr = new XMLHttpRequest();
     xhr.open("GET", flickrAPICall, true);
@@ -49,8 +48,7 @@ var lightbox = {
 
   },
 
-  // assembling photo URLs from the data response
-  parseJSON: function(data) {
+  parseJSON: function(data) {  // assembling photo URLs from the data response
 
     var key, imgObj, imgSrc, thumbPhotoSrc, detailPhotoSrc, detailBigPhotoSrc;
     var thumbHTML = '';
@@ -58,7 +56,7 @@ var lightbox = {
     for (key in data) {
       if (data.hasOwnProperty(key)) {
 
-        // Flickr's recommended action to create photo source URLs https://www.flickr.com/services/api/misc.urls.html
+        // Flickr's recommended action to create photo  URLs https://www.flickr.com/services/api/misc.urls.html
         imgObj = data[key];
 
         imgSrc = "https://farm" + imgObj.farm + ".staticflickr.com/" + imgObj.server + "/" + imgObj.id + "_";
@@ -75,106 +73,72 @@ var lightbox = {
     }
 
     lightbox.photoTotal = Number(key);
-    lightbox.placeHTML(thumbHTML);
+    lightbox.placeThumbsHTML(thumbHTML);
 
   },
 
-  // set photo thumbs into container and set event listeners for clicking or keypressing
-  placeHTML: function(elem) {
+  placeThumbsHTML: function(elem) {  // set thumbs in container and set event listeners
 
     document.getElementById("container").innerHTML = elem;
-
     document.getElementById("container").addEventListener("click", lightbox.openLightbox, false);
     document.getElementById("lightbox").addEventListener("click", lightbox.advanceLightbox, false);
-    window.addEventListener("keydown", lightbox.keyManipulateLightbox, false);
+    window.addEventListener("keydown", lightbox.advanceLightbox, false);
 
   },
 
-  // add visibility class, add hint, call photo
-  openLightbox: function(elem) {
+  openLightbox: function(elem) {  // add visibility class, add hint timeout, call photo
 
-    document.getElementById("lightbox").classList.add('open');
-    lightbox.setHintTimeout();
-    lightbox.placeUpcomingPhoto(elem);
+    var firstSelectedPID;
 
-  },
+    if (elem.target.localName === "li") {
+      document.getElementById("lightbox").classList.add('open');
 
-    // remove class that makes lightbox visible
-  closeLightbox: function() {
+      firstSelectedPID = elem.target.dataset.pid;
+      lightbox.placeUpcomingPhoto(firstSelectedPID);
 
-    document.getElementById("lightbox").classList.remove('open');
 
-  },
-
-  // hide hint!
-  hideHint: function(){
-
-      document.getElementById("hint").style.display = 'none';
-
-  },
-
-  // keypress handlers for moving photos and hiding hint
-  keyManipulateLightbox: function(e) {
-
-    e = e || window.event;
-
-    lightbox.hideHint();
-
-    if (e.which === 39) {
-      lightbox.placeUpcomingPhoto("right");
-    } else if (e.which === 37) {
-      lightbox.placeUpcomingPhoto("left");
-    } else if (e.which === 27) {
-      lightbox.closeLightbox();
+      setTimeout(function() {      // timeout for poor man's ux hinting for keypress events
+        document.getElementById("hint").style.display = 'none';
+      }, 3000);
     }
-  },
-
-  // poor man's ux hinting for keypress events
-  setHintTimeout: function() {
-
-    setTimeout(function() { lightbox.hideHint(); }, 3000);
 
   },
 
-  // click functionality within lightbox
-  advanceLightbox: function(elem) {
+  advanceLightbox: function(elem) {  // click and arrow functionality within lightbox
 
     var clickedItem;
 
+    elem = elem || window.event;
+
     if (elem.target !== elem.currentTarget) {
 
-      // account for clicking on arrow div or arrow span
-      clickedItem = elem.target.id || elem.target.className;
+      clickedItem = elem.target.id || elem.target.className;       // account for clicking on arrow div or arrow span
 
-      if (clickedItem === "right" || clickedItem === "left") {
-        lightbox.placeUpcomingPhoto(clickedItem);
-      } else if (clickedItem === "close") {
-        lightbox.closeLightbox();
+      if (clickedItem === "right" || elem.which === 39) {
+        lightbox.placeUpcomingPhoto(lightbox.nextPhotoPID);
+      } else if (clickedItem === "left" || elem.which === 37) {
+        lightbox.placeUpcomingPhoto(lightbox.prevPhotoPID);
+      } else if (clickedItem === "close" || elem.which === 27) {
+        document.getElementById("lightbox").classList.remove('open');
       }
+
     }
     elem.stopPropagation();
 
   },
 
-  // place next and previous ids on arrows (and preload next images)
-  setupArrowIDs: function(elem) {
-
-    var prev, next;
+  setupNextPrevIDs: function(elem) {  // set next and previous IDs and preload photos
 
     elem = Number(elem);
-    prev = (elem === 0) ? lightbox.photoTotal : elem - 1;
-    next = (elem === lightbox.photoTotal) ? 0 : elem + 1;
+    lightbox.prevPhotoPID = (elem === 0) ? lightbox.photoTotal : elem - 1;
+    lightbox.nextPhotoPID = (elem === lightbox.photoTotal) ? 0 : elem + 1;
 
-    document.getElementById("left").dataset.pid = prev;
-    document.getElementById("right").dataset.pid = next;
-
-    lightbox.preloadImage(prev);
-    lightbox.preloadImage(next);
+    lightbox.preloadImage(lightbox.prevPhotoPID);
+    lightbox.preloadImage(lightbox.nextPhotoPID);
 
   },
 
-  // poor man's photo cache to reduce load time for next and previous images  
-  preloadImage: function(elem) {
+  preloadImage: function(elem) {  // poor man's photo cache to reduce load time for next/previous images  
 
     var nextphotoID, imgOfphotoID;
 
@@ -184,18 +148,14 @@ var lightbox = {
 
   },
 
-  // advance to the next photo
-  placeUpcomingPhoto: function(elem) {
+  placeUpcomingPhoto: function(elem) {  // determine and place upcoming photo 
 
     var newPID, newestPhotoID, newPhotoSrc, newPhotoHTML;
 
-    // if elem is a next/prev string, select arrow element, else use elem passed through first click
-    newPID = (typeof elem === "string") ? document.getElementById(elem).dataset.pid : elem.target.dataset.pid;
-
-    newestPhotoID = document.querySelectorAll("[data-pid='" + newPID + "']");
+    newestPhotoID = document.querySelectorAll("[data-pid='" + elem + "']");
     newPhotoSrc = newestPhotoID[0].dataset.img;
 
-    newPhotoHTML = "<div class='lightboxphotoelem' data-pid='" + newPID + "' ";
+    newPhotoHTML = "<div class='lightboxphotoelem' data-pid='" + elem + "' ";
     newPhotoHTML += "style='background-image:url(" + newPhotoSrc + ")' ></div>";
 
     document.getElementById('lightboxphotoholder').insertAdjacentHTML('afterbegin', newPhotoHTML);
@@ -206,8 +166,7 @@ var lightbox = {
       document.getElementsByClassName("lightboxphotoelem")[1].outerHTML = '';
     }, 100);
 
-    lightbox.setupArrowIDs(newPID);
-
+    lightbox.setupNextPrevIDs(elem);
   }
 
 };
