@@ -6,14 +6,22 @@ body {
   margin: 0px;
   padding: 0px;
   font-family: Verdana;
+  font-size: 14px;
+  color: #453E4F;
 }
-#content {
-  padding: 5px 10px;
-  display: block;
-  margin: 0px auto;
+#photocache {
+  width: 0px;
+  height: 0px;
+  overflow: hidden;
+  position: absolute;
 }
 #content #container {
   list-style: none;
+  padding: 20px 0px 0px 0px;
+  position: absolute;
+  text-align: center;
+  background: white;
+  margin: 0px;
 }
 #content #loading {
   position: fixed;
@@ -28,10 +36,9 @@ body {
   margin: 10px;
   width: 100px;
   height: 100px;
-  float: left;
+  display: inline-block;
   background-size: cover;
   background-position: center center;
-  border: 2px solid white;
   border-radius: 5px;
   cursor: pointer;
   transition: transform 0.1s ease;
@@ -64,7 +71,7 @@ body {
 }
 #lightbox #lightboxbg {
   opacity: .9;
-  background: #dddddd;
+  background: #EFEFEF;
   width: 100%;
   height: 100%;
   position: absolute;
@@ -76,7 +83,6 @@ body {
   padding-left: 5px;
   text-align: center;
   width: 100%;
-  font-size: 14px;
 }
 #lightbox #lightboxphoto {
   width: 90%;
@@ -132,6 +138,15 @@ body {
   top: 50%;
   position: absolute;
 }
+#lightbox #lightboxarrows span::after {
+  content: "";
+  display: block;
+  position: absolute;
+  top: 50%;
+  border-bottom: solid 15px transparent;
+  border-top: solid 15px transparent;
+  top: 10px;
+}
 #lightbox #lightboxarrows #left {
   float: left;
 }
@@ -148,7 +163,7 @@ body {
 #lightbox #lightboxarrows #right span {
   right: 20px;
 }
-#lightbox #lightboxarrows #right span:after {
+#lightbox #lightboxarrows #right span::after {
   border-left: solid 15px #808080;
   left: 17px;
 }
@@ -159,15 +174,6 @@ body {
 #lightbox #lightboxarrows #left:hover span,
 #lightbox #lightboxarrows #right:hover span {
   opacity: .75;
-}
-#lightbox #lightboxarrows span:after {
-  content: "";
-  display: block;
-  position: absolute;
-  top: 50%;
-  border-bottom: solid 15px transparent;
-  border-top: solid 15px transparent;
-  top: 10px;
 }
 #lightbox .close {
   position: absolute;
@@ -187,25 +193,21 @@ body {
 #lightbox .close:hover {
   opacity: 1;
 }
-#lightbox .close:after {
+#lightbox .close::after {
   content: '\d7';
   text-align: center;
-  line-height: 50px;
-  font-size: 24px;
+  line-height: 48px;
+  font-size: 35px;
   color: #808080;
-  padding: 15px;
+  padding: 11px;
 }
 #lightbox #hint {
   top: 0px;
   position: absolute;
   text-align: center;
-  font-size: 12;
-  background: #6ecadc;
+  background: #E5FFB9;
   margin: 17px 0px 0px 20px;
   border-radius: 5px;
   padding: 1% 2%;
   opacity: .9;
-}
-#photocache {
-  display: none;
 }

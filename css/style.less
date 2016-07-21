@@ -1,8 +1,9 @@
 /* css/style.less */
 
-@gray      : #808080;
-@lightgray : #dddddd;
-@blue      : #6ecadc;
+@lightboxaccents : #808080;
+@lightboxbg : #EFEFEF;
+@hint : #E5FFB9;
+@textcolor: #453E4F;
 @fastspeed : 0.1s;
 @slowspeed : 0.75s;
 
@@ -13,44 +14,52 @@ body {
   margin: 0px;
   padding: 0px;
   font-family: Verdana;
+  font-size: 14px;
+  color:@textcolor;
 }
-
+#photocache {
+  width:0px;
+  height:0px;
+  overflow:hidden;
+  position:absolute;
+}
 #content {
-  padding:5px 10px;
-  display:block;
-  margin:0px auto;
   #container {
-    list-style:none;
+    list-style: none;
+    padding: 20px 0px 0px 0px;
+    position: absolute;
+    text-align: center;
+    background: white;
+    margin: 0px;
   }
   #loading {
     position: fixed;
     width: 100%;
     height: 100%;
-    background-image:url(../assets/spinny.gif);
-    background-position:center center;
-    background-repeat:no-repeat;
+    background-image: url(../assets/spinny.gif);
+    background-position: center center;
+    background-repeat: no-repeat;
   }
   .img {
     padding: 10px;
     margin: 10px;
     width: 100px;
     height: 100px;
-    float: left;
+    display: inline-block;
     background-size: cover;
     background-position: center center;
-    border: 2px solid white;
     border-radius: 5px;
     cursor: pointer;
     transition: transform @fastspeed ease;
     -moz-transition: transform @fastspeed ease;
     -ms-transition: transform @fastspeed ease;
     -webkit-transition: transform @fastspeed ease;
-  }
-  .img:hover {
-    transform: scale(1.05);
-    -moz-transform: scale(1.05);
-    -webkit-transform: scale(1.05);
-    -ms-transform: scale(1.05);
+    &:hover {
+      transform: scale(1.05);
+      -moz-transform: scale(1.05);
+      -webkit-transform: scale(1.05);
+      -ms-transform: scale(1.05);
+    }
   }
 }
 
@@ -58,14 +67,13 @@ body {
   position: fixed;
   width: 0px;
   height: 0px;
-  overflow:hidden;
-  top:0px;
+  overflow: hidden;
+  top: 0px;
   opacity: 0;
   transition: opacity @slowspeed ease-out;
   -webkit-transition: opacity @slowspeed ease-out;
   -moz-transition: opacity @slowspeed ease-out;
   -ms-transition: opacity @slowspeed ease-out;
-
   &.open {
     opacity: 1;
     width: 100%;
@@ -73,19 +81,18 @@ body {
   }
   #lightboxbg {
     opacity: .9;
-    background: @lightgray;
+    background: @lightboxbg;
     width: 100%;
     height: 100%;
     position: absolute;
   }
-  #lightboxcaption{
+  #lightboxcaption {
     position: absolute;
     bottom: -20px;
     z-index: 999;
     padding-left: 5px;
     text-align: center;
     width: 100%;
-    font-size:14px;
   }
   #lightboxphoto {
     width: 90%;
@@ -93,9 +100,9 @@ body {
     margin: 2% 5%;
     display: block;
     position: relative;
-    background-image:url(../assets/spinny.gif);
-    background-position:center center;
-    background-repeat:no-repeat;
+    background-image: url(../assets/spinny.gif);
+    background-position: center center;
+    background-repeat: no-repeat;
   }
   .lightboxphotoelem {
     display: block;
@@ -116,11 +123,12 @@ body {
   #lightboxarrows {
     width: 90%;
     height: 90%;
-    margin:2% 5%;
+    margin: 2% 5%;
     top: 0px;
     position: absolute;
     box-sizing: border-box;
-    #left, #right {
+    #left,
+    #right {
       width: 49%;
       height: 100%;
       cursor: pointer;
@@ -138,41 +146,43 @@ body {
       border-radius: 5%;
       top: 50%;
       position: absolute;
+      &::after {
+        content: "";
+        display: block;
+        position: absolute;
+        top: 50%;
+        border-bottom: solid 15px transparent;
+        border-top: solid 15px transparent;
+        top: 10px;
+      }
     }
     #left {
       float: left;
-    }
-    #left span {
-      left: 20px;
-    }
-    #left span:after {
-      border-right: solid 20px @gray;
-      right: 17px;
+      span {
+        left: 20px;
+        &:after {
+          border-right: solid 20px @lightboxaccents;
+          right: 17px;
+        }
+      }
     }
     #right {
       float: right;
+      span {
+        right: 20px;
+        &::after {
+          border-left: solid 15px @lightboxaccents;
+          left: 17px;
+        }
+        ;
+      }
     }
-    #right span {
-      right: 20px;
-    }
-    #right span:after {
-      border-left: solid 15px @gray;
-      left: 17px;
-    }
-    #left:hover, #right:hover {
+    #left:hover,
+    #right:hover {
       opacity: 1;
-    }
-    #left:hover span, #right:hover span{
-      opacity:.75;
-    }
-    span:after {
-      content: "";
-      display: block;
-      position: absolute;
-      top: 50%;
-      border-bottom: solid 15px transparent;
-      border-top: solid 15px transparent;
-      top: 10px;
+      span {
+        opacity: .75;
+      }
     }
   }
   .close {
@@ -190,32 +200,26 @@ body {
     -webkit-transition: opacity @fastspeed ease-out;
     -moz-transition: opacity @fastspeed ease-out;
     -ms-transition: opacity @fastspeed ease-out;
-
-  }
-  .close:hover {
-    opacity: 1;
-  }
-  .close:after {
-    content: '\d7';
-    text-align: center;
-    line-height: 50px;
-    font-size: 24px;
-    color: @gray;
-    padding: 15px;
+    &:hover {
+      opacity: 1;
+    }
+    &::after {
+      content: '\d7';
+      text-align: center;
+      line-height: 48px;
+      font-size: 35px;
+      color: #808080;
+      padding: 11px;
+    }
   }
   #hint {
     top: 0px;
     position: absolute;
     text-align: center;
-    font-size: 12;
-    background: @blue;
+    background: @hint;
     margin: 17px 0px 0px 20px;
     border-radius: 5px;
     padding: 1% 2%;
     opacity: .9;
   }
-}
-
-#photocache {
-  display: none;
 }
