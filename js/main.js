@@ -48,16 +48,16 @@ var lightbox = {
 
   },
 
-  parseJSON: function(data) {  // assembling photo URLs from the data response
+  parseJSON: function(elem) {  // assembling photo URLs from the data response
 
     var key, imgObj, imgSrc, thumbPhotoSrc, detailPhotoSrc, detailBigPhotoSrc;
     var thumbHTML = '';
 
-    for (key in data) {
-      if (data.hasOwnProperty(key)) {
+    for (key in elem) {
+      if (elem.hasOwnProperty(key)) {
 
         // Flickr's recommended action to create photo  URLs https://www.flickr.com/services/api/misc.urls.html
-        imgObj = data[key];
+        imgObj = elem[key];
 
         imgSrc = "https://farm" + imgObj.farm + ".staticflickr.com/" + imgObj.server + "/" + imgObj.id + "_";
 
@@ -96,7 +96,6 @@ var lightbox = {
       firstSelectedPID = elem.target.dataset.pid;
       lightbox.placeUpcomingPhoto(firstSelectedPID);
 
-
       setTimeout(function() {      // timeout for poor man's ux hinting for keypress events
         document.getElementById("hint").style.display = 'none';
       }, 3000);
@@ -112,7 +111,7 @@ var lightbox = {
 
     if (elem.target !== elem.currentTarget) {
 
-      clickedItem = elem.target.id || elem.target.className;       // account for clicking on arrow div or arrow span
+      clickedItem = elem.target.id || elem.target.className;  // account for clicking on arrow div or arrow span
 
       if (clickedItem === "right" || elem.which === 39) {
         lightbox.placeUpcomingPhoto(lightbox.nextPhotoPID);
@@ -140,17 +139,17 @@ var lightbox = {
 
   preloadImage: function(elem) {  // poor man's photo cache to reduce load time for next/previous images  
 
-    var nextphotoID, imgOfphotoID;
+    var upcomingPhotoElem, upcomingPhotoSrc;
 
-    nextphotoID = document.querySelectorAll("[data-pid='" + elem + "']");
-    imgOfphotoID = nextphotoID[0].dataset.img;
-    document.getElementById('photocache').innerHTML = "<img src='" + imgOfphotoID + "' />";
+    upcomingPhotoElem = document.querySelectorAll("[data-pid='" + elem + "']");
+    upcomingPhotoSrc = upcomingPhotoElem[0].dataset.img;
+    document.getElementById('photocache').innerHTML = "<img src='" + upcomingPhotoSrc + "' />";
 
   },
 
   placeUpcomingPhoto: function(elem) {  // determine and place upcoming photo 
 
-    var newPID, newestPhotoID, newPhotoSrc, newPhotoHTML;
+    var newestPhotoID, newPhotoSrc, newPhotoHTML;
 
     newestPhotoID = document.querySelectorAll("[data-pid='" + elem + "']");
     newPhotoSrc = newestPhotoID[0].dataset.img;
