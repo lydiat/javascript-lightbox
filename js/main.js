@@ -3,7 +3,7 @@
 //
 // Wide screen adaptive display
 // Lazy load for thumbs
-// Tagging and array filtering by location
+// Deep linking/history.pushState
 // 
 
 var lightbox = {
@@ -88,8 +88,8 @@ var lightbox = {
         // in case one feels ambitious and builds screen-adaptive photo loading
         detailBigPhotoSrc = imgSrc + originalSecretID + "_o.jpg";
 
-        thumbHTML += "<span class='img' title='" + photoTitle + "' id='" + photoID + "' data-pid='" + key + "'";
-        thumbHTML += " data-img='" + detailPhotoSrc + "' style='background-image:url(" + thumbPhotoSrc + ")'></span>";
+        thumbHTML += "<li class='img' title='" + photoTitle + "' id='" + photoID + "' data-pid='" + key + "'";
+        thumbHTML += " data-img='" + detailPhotoSrc + "' style='background-image:url(" + thumbPhotoSrc + ")'></li>";
       }
     }
 
@@ -107,12 +107,20 @@ var lightbox = {
     document.getElementById("container").innerHTML = elem;
 
     // set event listeners for clicking or keypressing
-    document.getElementById("container").addEventListener("click", lightbox.initiateLightbox, false);
+    document.getElementById("container").addEventListener("click", lightbox.openLightbox, false);
     document.getElementById("lightbox").addEventListener("click", lightbox.advanceLightbox, false);
     window.addEventListener("keydown", lightbox.keyManipulateLightbox, false);
 
     // set width of container element for nicer display
     lightbox.sizeContainer();
+
+  },
+
+  openLightbox: function(elem) {
+
+    document.getElementById("lightbox").classList.add('open');
+    lightbox.setHintTimeout();
+    lightbox.placeUpcomingPhoto(elem);
 
   },
 
@@ -142,31 +150,6 @@ var lightbox = {
     measuredWidth = (potentialSquares * 144);
     document.getElementById("container").style.width = measuredWidth + "px";
     window.addEventListener("resize", lightbox.sizeContainer);
-
-  },
-
-  // make lightbox visible and place first image
-  initiateLightbox: function(elem) {
-
-    var photoID, photoHTML;
-
-    if (elem.target !== elem.currentTarget) {
-
-      document.getElementById("lightbox").classList.add('open');
-
-      photoID = elem.target.dataset.pid;
-
-      photoHTML = "<div class='lightboxphotoelem' data-pid='" + photoID + "' ";
-      photoHTML += "style='background-image:url(" + elem.target.dataset.img + ")' ></div>";
-
-      document.getElementById("lightboxphotoholder").innerHTML = photoHTML;
-      document.getElementById("lightboxcaption").innerHTML = elem.target.title;
-
-      lightbox.setupArrowIDs(photoID);
-      lightbox.setHintTimeout();
-    }
-
-    elem.stopPropagation();
 
   },
 
@@ -251,6 +234,7 @@ var lightbox = {
 
     newPhotoHTML = "<div class='lightboxphotoelem' data-pid='" + photoID + "' ";
     newPhotoHTML += "style='background-image:url(" + imgOfphotoID + ")' ></div>";
+
     document.getElementById('lightboxphotoholder').insertAdjacentHTML('afterbegin', newPhotoHTML);
     document.getElementById("lightboxcaption").innerHTML = elemOfphotoID[0].title;
 
@@ -262,6 +246,7 @@ var lightbox = {
     lightbox.setupArrowIDs(photoID);
 
   }
+
 };
 
 (function() {
