@@ -7,12 +7,15 @@ body {
   padding: 0px;
   font-family: Verdana;
 }
-#container {
+#content {
   padding: 5px 10px;
   display: block;
   margin: 0px auto;
 }
-#container #loading {
+#content #container {
+  list-style: none;
+}
+#content #loading {
   position: fixed;
   width: 100%;
   height: 100%;
@@ -20,7 +23,7 @@ body {
   background-position: center center;
   background-repeat: no-repeat;
 }
-#container .img {
+#content .img {
   padding: 10px;
   margin: 10px;
   width: 100px;
@@ -36,7 +39,7 @@ body {
   -ms-transition: transform 0.1s ease;
   -webkit-transition: transform 0.1s ease;
 }
-#container .img:hover {
+#content .img:hover {
   transform: scale(1.05);
   -moz-transform: scale(1.05);
   -webkit-transform: scale(1.05);

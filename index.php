@@ -11,8 +11,10 @@
 
 <body>
 
-  <div id="container">
-    <div id="loading"></div>
+  <div id="content">
+  <ul id="container">
+  <div id="loading"></div>
+</ul>
   </div>
 
   <div id="lightbox">
