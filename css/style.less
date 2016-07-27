@@ -6,220 +6,221 @@
 @textcolor: #453E4F;
 @fastspeed : 0.1s;
 @slowspeed : 0.75s;
-
 html,
 body {
-  position: relative;
-  display: block;
-  margin: 0px;
-  padding: 0px;
-  font-family: Verdana;
-  font-size: 14px;
-  color:@textcolor;
-}
-#photocache {
-  width:0px;
-  height:0px;
-  overflow:hidden;
-  position:absolute;
-}
-#content {
-  #container {
-    list-style: none;
-    padding: 20px 0px 0px 0px;
-    position: absolute;
-    text-align: center;
-    background: white;
+    position: relative;
+    display: block;
     margin: 0px;
-  }
-  #loading {
-    position: fixed;
-    width: 100%;
-    height: 100%;
-    background-image: url(../assets/spinny.gif);
-    background-position: center center;
-    background-repeat: no-repeat;
-  }
-  .img {
-    padding: 10px;
-    margin: 10px;
-    width: 100px;
-    height: 100px;
-    display: inline-block;
-    background-size: cover;
-    background-position: center center;
-    border-radius: 5px;
-    cursor: pointer;
-    transition: transform @fastspeed ease;
-    -moz-transition: transform @fastspeed ease;
-    -ms-transition: transform @fastspeed ease;
-    -webkit-transition: transform @fastspeed ease;
-    &:hover {
-      transform: scale(1.05);
-      -moz-transform: scale(1.05);
-      -webkit-transform: scale(1.05);
-      -ms-transform: scale(1.05);
+    padding: 0px;
+    font-family: Verdana;
+    font-size: 14px;
+    color: @textcolor;
+}
+
+#photocache {
+    width: 0px;
+    height: 0px;
+    overflow: hidden;
+    position: absolute;
+}
+
+#content {
+    #container {
+        list-style: none;
+        padding: 20px 0px 0px 0px;
+        position: absolute;
+        text-align: center;
+        background: white;
+        margin: 0px;
     }
-  }
+    #loading {
+        position: fixed;
+        width: 100%;
+        height: 100%;
+        background-image: url(../assets/spinny.gif);
+        background-position: center center;
+        background-repeat: no-repeat;
+    }
+    .img {
+        padding: 10px;
+        margin: 10px;
+        width: 100px;
+        height: 100px;
+        display: inline-block;
+        background-size: cover;
+        background-position: center center;
+        border-radius: 5px;
+        cursor: pointer;
+        transition: transform @fastspeed ease;
+        -moz-transition: transform @fastspeed ease;
+        -ms-transition: transform @fastspeed ease;
+        -webkit-transition: transform @fastspeed ease;
+        &:hover {
+            transform: scale(1.05);
+            -moz-transform: scale(1.05);
+            -webkit-transform: scale(1.05);
+            -ms-transform: scale(1.05);
+        }
+    }
 }
 
 #lightbox {
-  position: fixed;
-  width: 0px;
-  height: 0px;
-  overflow: hidden;
-  top: 0px;
-  opacity: 0;
-  transition: opacity @slowspeed ease-out;
-  -webkit-transition: opacity @slowspeed ease-out;
-  -moz-transition: opacity @slowspeed ease-out;
-  -ms-transition: opacity @slowspeed ease-out;
-  &.open {
-    opacity: 1;
-    width: 100%;
-    height: 100%;
-  }
-  #lightboxbg {
-    opacity: .9;
-    background: @lightboxbg;
-    width: 100%;
-    height: 100%;
-    position: absolute;
-  }
-  #lightboxcaption {
-    position: absolute;
-    bottom: -20px;
-    z-index: 999;
-    padding-left: 5px;
-    text-align: center;
-    width: 100%;
-  }
-  #lightboxphoto {
-    width: 90%;
-    height: 90%;
-    margin: 2% 5%;
-    display: block;
-    position: relative;
-    background-image: url(../assets/spinny.gif);
-    background-position: center center;
-    background-repeat: no-repeat;
-  }
-  .lightboxphotoelem {
-    display: block;
-    background-size: contain;
-    background-repeat: no-repeat;
-    background-position: center center;
-    height: 100%;
-    width: 100%;
-    position: absolute;
-    &:nth-child(2) {
-      transition: opacity @fastspeed ease-out;
-      -webkit-transition: opacity @fastspeed ease-out;
-      -moz-transition: opacity @fastspeed ease-out;
-      -ms-transition: opacity @fastspeed ease-out;
-      opacity: 0;
-    }
-  }
-  #lightboxarrows {
-    width: 90%;
-    height: 90%;
-    margin: 2% 5%;
+    position: fixed;
+    width: 0px;
+    height: 0px;
+    overflow: hidden;
     top: 0px;
-    position: absolute;
-    box-sizing: border-box;
-    #left,
-    #right {
-      width: 49%;
-      height: 100%;
-      cursor: pointer;
-      opacity: 0;
-      transition: opacity @fastspeed ease-out;
-      -webkit-transition: opacity @fastspeed ease-out;
-      -moz-transition: opacity @fastspeed ease-out;
-      -ms-transition: opacity @fastspeed ease-out;
+    opacity: 0;
+    transition: opacity @slowspeed ease-out;
+    -webkit-transition: opacity @slowspeed ease-out;
+    -moz-transition: opacity @slowspeed ease-out;
+    -ms-transition: opacity @slowspeed ease-out;
+    &.open {
+        opacity: 1;
+        width: 100%;
+        height: 100%;
     }
-    span {
-      background: white;
-      width: 50px;
-      height: 50px;
-      opacity: 0;
-      border-radius: 5%;
-      top: 50%;
-      position: absolute;
-      &::after {
-        content: "";
-        display: block;
+    #lightboxbg {
+        opacity: .9;
+        background: @lightboxbg;
+        width: 100%;
+        height: 100%;
         position: absolute;
-        top: 50%;
-        border-bottom: solid 15px transparent;
-        border-top: solid 15px transparent;
-        top: 10px;
-      }
     }
-    #left {
-      float: left;
-      span {
-        left: 20px;
-        &:after {
-          border-right: solid 20px @lightboxaccents;
-          right: 17px;
+    #lightboxcaption {
+        position: absolute;
+        bottom: -20px;
+        z-index: 999;
+        padding-left: 5px;
+        text-align: center;
+        width: 100%;
+    }
+    #lightboxphoto {
+        width: 90%;
+        height: 90%;
+        margin: 2% 5%;
+        display: block;
+        position: relative;
+        background-image: url(../assets/spinny.gif);
+        background-position: center center;
+        background-repeat: no-repeat;
+    }
+    .lightboxphotoelem {
+        display: block;
+        background-size: contain;
+        background-repeat: no-repeat;
+        background-position: center center;
+        height: 100%;
+        width: 100%;
+        position: absolute;
+        &:nth-child(2) {
+            transition: opacity @fastspeed ease-out;
+            -webkit-transition: opacity @fastspeed ease-out;
+            -moz-transition: opacity @fastspeed ease-out;
+            -ms-transition: opacity @fastspeed ease-out;
+            opacity: 0;
         }
-      }
     }
-    #right {
-      float: right;
-      span {
+    #lightboxarrows {
+        width: 90%;
+        height: 90%;
+        margin: 2% 5%;
+        top: 0px;
+        position: absolute;
+        box-sizing: border-box;
+        #left,
+        #right {
+            width: 49%;
+            height: 100%;
+            cursor: pointer;
+            opacity: 0;
+            transition: opacity @fastspeed ease-out;
+            -webkit-transition: opacity @fastspeed ease-out;
+            -moz-transition: opacity @fastspeed ease-out;
+            -ms-transition: opacity @fastspeed ease-out;
+        }
+        span {
+            background: white;
+            width: 50px;
+            height: 50px;
+            opacity: 0;
+            border-radius: 5%;
+            top: 50%;
+            position: absolute;
+            &::after {
+                content: "";
+                display: block;
+                position: absolute;
+                top: 50%;
+                border-bottom: solid 15px transparent;
+                border-top: solid 15px transparent;
+                top: 10px;
+            }
+        }
+        #left {
+            float: left;
+            span {
+                left: 20px;
+                &:after {
+                    border-right: solid 20px @lightboxaccents;
+                    right: 17px;
+                }
+            }
+        }
+        #right {
+            float: right;
+            span {
+                right: 20px;
+                &::after {
+                    border-left: solid 15px @lightboxaccents;
+                    left: 17px;
+                }
+                ;
+            }
+        }
+        #left:hover,
+        #right:hover {
+            opacity: 1;
+            span {
+                opacity: .75;
+            }
+        }
+    }
+    .close {
+        position: absolute;
+        top: 17px;
         right: 20px;
-        &::after {
-          border-left: solid 15px @lightboxaccents;
-          left: 17px;
-        }
-        ;
-      }
-    }
-    #left:hover,
-    #right:hover {
-      opacity: 1;
-      span {
+        background: white;
         opacity: .75;
-      }
+        border-radius: 5%;
+        cursor: pointer;
+        width: 50px;
+        height: 50px;
+        cursor: pointer;
+        transition: opacity @fastspeed ease-out;
+        -webkit-transition: opacity @fastspeed ease-out;
+        -moz-transition: opacity @fastspeed ease-out;
+        -ms-transition: opacity @fastspeed ease-out;
+        &:hover {
+            opacity: 1;
+        }
+        &::after {
+            content: '\d7';
+            text-align: center;
+            line-height: 48px;
+            font-size: 35px;
+            color: #808080;
+            padding: 11px;
+        }
     }
-  }
-  .close {
-    position: absolute;
-    top: 17px;
-    right: 20px;
-    background: white;
-    opacity: .75;
-    border-radius: 5%;
-    cursor: pointer;
-    width: 50px;
-    height: 50px;
-    cursor: pointer;
-    transition: opacity @fastspeed ease-out;
-    -webkit-transition: opacity @fastspeed ease-out;
-    -moz-transition: opacity @fastspeed ease-out;
-    -ms-transition: opacity @fastspeed ease-out;
-    &:hover {
-      opacity: 1;
+    #hint {
+        top: 0px;
+        position: absolute;
+        text-align: center;
+        background: @hint;
+        margin: 17px 0px 0px 20px;
+        border-radius: 5px;
+        padding: 1% 2%;
+        opacity: .9;
     }
-    &::after {
-      content: '\d7';
-      text-align: center;
-      line-height: 48px;
-      font-size: 35px;
-      color: #808080;
-      padding: 11px;
-    }
-  }
-  #hint {
-    top: 0px;
-    position: absolute;
-    text-align: center;
-    background: @hint;
-    margin: 17px 0px 0px 20px;
-    border-radius: 5px;
-    padding: 1% 2%;
-    opacity: .9;
-  }
 }
